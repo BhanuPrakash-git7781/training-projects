@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +22,7 @@ public class CurrencyExchangeController {
 	private CurrencyExchangeRepository repository;
 	
 	@GetMapping("/currency-exchange/from/{from}/to/{to}")
-	public CurrencyExchange getExchangeValue(@PathVariable String from, 
+	public ResponseEntity<CurrencyExchange> getExchangeValue(@PathVariable String from, 
 			@PathVariable String to) {
 		
 		CurrencyExchange currencyExchange = repository.findByFromAndTo(from, to);
@@ -31,7 +32,8 @@ public class CurrencyExchangeController {
 		
 		String port = environment.getProperty("local.server.port");
 		currencyExchange.setEnvironment(port);
-		return currencyExchange;		
+		
+		return ResponseEntity.ok(currencyExchange);		
 	}
 	
 }
